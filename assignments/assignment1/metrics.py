@@ -1,3 +1,5 @@
+import numpy as np
+
 def binary_classification_metrics(prediction, ground_truth):
     '''
     Computes metrics for binary classification
@@ -9,17 +11,43 @@ def binary_classification_metrics(prediction, ground_truth):
     Returns:
     precision, recall, f1, accuracy - classification metrics
     '''
-    precision = 0
-    recall = 0
-    accuracy = 0
-    f1 = 0
-
-    # TODO: implement metrics!
-    # Some helpful links:
-    # https://en.wikipedia.org/wiki/Precision_and_recall
-    # https://en.wikipedia.org/wiki/F1_score
+    # Приводим к типу int для удобства подсчёта (True->1, False->0)
+    pred = prediction.astype(int)
+    truth = ground_truth.astype(int)
     
-    return precision, recall, f1, accuracy
+    # Вычисляем компоненты confusion matrix
+    TP = np.sum((pred == 1) & (truth == 1))
+    TN = np.sum((pred == 0) & (truth == 0))
+    FP = np.sum((pred == 1) & (truth == 0))
+    FN = np.sum((pred == 0) & (truth == 1))
+    
+    # Accuracy = (TP + TN) / (TP + TN + FP + FN)
+    total = TP + TN + FP + FN
+    if total == 0:
+        accuracy = 0.0
+    else:
+        accuracy = (TP + TN) / total
+    
+    # Precision = TP / (TP + FP)
+    if (TP + FP) == 0:
+        precision = 0.0
+    else:
+        precision = TP / (TP + FP)
+    
+    # Recall = TP / (TP + FN)
+    if (TP + FN) == 0:
+        recall = 0.0
+    else:
+        recall = TP / (TP + FN)
+    
+    # F1 = 2 * precision * recall / (precision + recall)
+    if (precision + recall) == 0:
+        f1 = 0.0
+    else:
+        f1 = 2 * precision * recall / (precision + recall)
+    
+    # Приводим к float для единообразия (на всякий случай)
+    return float(precision), float(recall), float(f1), float(accuracy)
 
 
 def multiclass_accuracy(prediction, ground_truth):
