@@ -119,7 +119,13 @@ class KNN:
         for i in range(num_test):
             # TODO: Implement choosing best class based on k
             # nearest training samples
-            pass
+            indices = np.argsort(dists[i])[:self.k]  # или np.argpartition(dists[i], self.k)[:self.k]
+            nearest_labels = self.train_y[indices]
+            # Вариант 1: через сумму (если метки 0 и 1)
+            votes_for_1 = np.sum(nearest_labels)
+            votes_for_0 = self.k - votes_for_1
+            pred[i] = votes_for_1 > votes_for_0
+            print(pred[i])
         return pred
 
     def predict_labels_multiclass(self, dists):
