@@ -12,14 +12,14 @@ def binary_classification_metrics(prediction, ground_truth):
     precision, recall, f1, accuracy - classification metrics
     '''
     # Приводим к типу int для удобства подсчёта (True->1, False->0)
-    pred = prediction.astype(int)
-    truth = ground_truth.astype(int)
+    pred = prediction
+    truth = ground_truth
     
     # Вычисляем компоненты confusion matrix
-    TP = np.sum((pred == 1) & (truth == 1))
-    TN = np.sum((pred == 0) & (truth == 0))
-    FP = np.sum((pred == 1) & (truth == 0))
-    FN = np.sum((pred == 0) & (truth == 1))
+    TP = np.sum((pred == True) & (truth == True))
+    TN = np.sum((pred == False) & (truth == False))
+    FP = np.sum((pred == True) & (truth == False))
+    FN = np.sum((pred == False) & (truth == True))
     
     # Accuracy = (TP + TN) / (TP + TN + FP + FN)
     total = TP + TN + FP + FN
