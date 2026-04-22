@@ -16,10 +16,10 @@ def binary_classification_metrics(prediction, ground_truth):
     truth = ground_truth
     
     # Вычисляем компоненты confusion matrix
-    TP = np.sum((pred == True) & (truth == True))
-    TN = np.sum((pred == False) & (truth == False))
-    FP = np.sum((pred == True) & (truth == False))
-    FN = np.sum((pred == False) & (truth == True))
+    TP = np.sum(pred & truth)
+    TN = np.sum(~pred & ~truth)
+    FP = np.sum(pred & ~truth)
+    FN = np.sum(~pred & truth)
     
     # Accuracy = (TP + TN) / (TP + TN + FP + FN)
     total = TP + TN + FP + FN
@@ -47,7 +47,7 @@ def binary_classification_metrics(prediction, ground_truth):
         f1 = 2 * precision * recall / (precision + recall)
     
     # Приводим к float для единообразия (на всякий случай)
-    return float(precision), float(recall), float(f1), float(accuracy)
+    return precision, recall, f1, accuracy
 
 
 def multiclass_accuracy(prediction, ground_truth):
